@@ -1,0 +1,24 @@
+<%- include('header'); -%>
+<br>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title">Signup</h2>
+                <form id='signupForm' method="POST" action="/signup">
+                    <div class="form-group">
+                        <label for="account">Account</label>
+                        <input type="text" name="account" class="form-control" aria-describedby="emailHelp" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="pwd">Password</label>
+                        <input type="password" name="password" class="form-control" required minlength="7">
+                    </div>
+                    <button type="submit" class="btn btn-primary">signup</button>
+                    <button type="button" class="btn btn-outline-success"
+                        onclick="location.href='/login'">login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

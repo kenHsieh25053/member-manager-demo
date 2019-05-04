@@ -1,0 +1,160 @@
+<%- include('header'); -%>
+
+<body>
+    <%- include('navbar'); -%>
+    <br>
+    <div class="container">
+        <div class="row">
+            <div class="col-6" align-self="center">
+                <h3>Members</h3>
+            </div>
+            <div class="col-6" align-self="center">
+                <form class="float-right">
+                    <button class="btn btn-success" type="button" data-toggle="modal" data-target="#addModel">Add
+                        Member</button>
+                </form>
+            </div>
+        </div>
+        <div class="card  table-responsive-sm">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Age</th>
+                        <th scope="col">Birthday</th>
+                        <th scope="col">Options</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for(member of people) { %>
+                    <tr>
+                        <td><%= member.name %></td>
+                        <td><%= member.age %></td>
+                        <td><%= member.birthday %></td>
+                        <td>
+                            <form class="options-form" method="POST" action="/member-delete/<%= member.id %>">
+                                <button id="deleteSubmit" class="btn btn-danger" type="submit" value="d">Delete</button>
+                            </form>
+                            <form class="options-form">
+                                <button id="updateSubmit" class="btn btn-primary" type="button" data-toggle="modal"
+                                    data-target="#updateModel" value="u">Update</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <!-- Modal for updating member -->
+                    <div class="modal fade" id="updateModel" tabindex="-1" role="dialog"
+                        aria-labelledby="updateModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="updateModalLabel">Update Member Info</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="updateForm" role="form" method="POST"
+                                        action="/member-update/<%= member.id %>">
+                                        <div class="form-group">
+                                            <label for="updateName">Name</label>
+                                            <input id="updateMemberName" type="text" class="form-control" name="name"
+                                                value="<%= member.name %>" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="updateAge">Age</label>
+                                            <input id='updateMemberAge' type="number" class="form-control" name="age"
+                                                value="<%= member.age %>" required min="0" max="120">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="updateBirthday">Birthday</label>
+                                            <input id="updateMemberBir" type="date" class="form-control" name="birthday"
+                                                value="<%= member.birthday %>" required>
+                                        </div>
+                                        <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-success" id="updateSubmit">Submit</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal for adding member -->
+    <div class="modal fade" id="addModel" tabindex="-1" role="dialog" aria-labelledby="addModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addModalLabel">Member Info</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="memForm" role="form" method="POST" action="/member-list">
+                        <div class="form-group">
+                            <label for="addName">Name</label>
+                            <input id="addMemberName" type="text" class="form-control" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="addAge">Age</label>
+                            <input id="addMemberAge" type="number" class="form-control" name="age" required min="0"
+                                max="120">
+                        </div>
+                        <div class="form-group">
+                            <label for="addBirthday">Birthday</label>
+                            <input id="addMemberBir" type="date" class="form-control" name="birthday" required>
+                        </div>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-success" id="addSubmit">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <script>
+        // Add member form
+        $(function () {
+            $('#addSubmit').on('click', function (e) {
+                e.preventDefault()
+
+                const $name = $('#addMemberName').val()
+                const $age = $('#addMemberAge').val()
+                const $birthday = $('#addMemberBir').val()
+
+                // Check all columns are filled
+                if (!$name || !$age || !$birthday) {
+                    return alert('Please fill all columns!')
+                }
+
+                $('#memForm').submit()
+                $('#addModel').modal('hide');
+            });
+        });
+
+        // Update member form
+        $(function () {
+            $('#updateSubmit').on('click', function (e) {
+                e.preventDefault()
+
+                const $name = $('#updateMemberName').val()
+                const $age = $('#updateMemberAge').val()
+                const $birthday = $('#updateMemberBir').val()
+
+                // Check all columns are filled
+                if (!$name || !$age || !$birthday) {
+                    return alert('Please fill all columns!')
+                }
+
+                $('#updateForm').submit()
+                $('#updateModel').modal('hide');
+            });
+        });
+    </script>
+</body>
