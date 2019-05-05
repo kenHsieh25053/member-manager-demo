@@ -2,10 +2,16 @@ const sequelize = require('../db/db');
 const Sequelize = require('sequelize');
 
 const bcrypt = require('bcryptjs');
+const uuid = require('uuid');
 
 
 // Define admin's table
 const Admin = sequelize.define('admin', {
+    id: {
+        type: Sequelize.UUID,
+        unique: true,
+        primaryKey: true
+    },
     account: {
         type: Sequelize.STRING,
         allowNull: false,
@@ -39,7 +45,9 @@ const Member = sequelize.define('member', {
 
 
 // Associate with member's table
-Admin.hasMany(Member);
+Admin.hasMany(Member, {
+    foreignKey: 'adminId'
+});
 Member.belongsTo(Admin);
 
 
@@ -50,14 +58,19 @@ Admin.beforeCreate((admin) => {
     });
 });
 
+// Set up uuid for admin id 
+Admin.beforeCreate((admin) => {
+    return admin.id = uuid()
+})
+
 
 // Create admin and member table
 // Admin.sync({
-//     force: true
+//     force: false
 // })
 
 // Member.sync({
-//     force: true
+//     force: false
 // })
 
 module.exports = {
