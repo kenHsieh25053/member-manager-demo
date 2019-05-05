@@ -28,7 +28,7 @@ router.post("/signup", async (req, res) => {
 
     try {
         await admin.save();
-        res.status(201).redirect("/login");
+        res.status(201).redirect("login");
     } catch (err) {
         res.status(400).send(err.errors[0].message);
     }
@@ -65,7 +65,9 @@ router.post("/login", async (req, res) => {
         };
 
         // Set Jsonwebtoken as cookie
-        res.cookie('access_token', generateJwtoken());
+        res.cookie('access_token', generateJwtoken(), {
+            httpOnly: false
+        });
 
         res.redirect('member-list');
     } catch (err) {

@@ -58,12 +58,13 @@ router.post("/member-delete/:id", auth, async (req, res) => {
     try {
         const member = await Member.destroy({
             where: {
+                adminId: req.admin.id,
                 id: req.params.id
             }
         });
 
         if (!member) {
-            res.status(404);
+            res.status(404).send('Member not found!');
         }
         res.redirect("/member-list");
     } catch (err) {
