@@ -66,7 +66,7 @@ router.post("/login", async (req, res) => {
 
         // Set Jsonwebtoken as cookie
         res.cookie('access_token', generateJwtoken(), {
-            httpOnly: false
+            httpOnly: true
         });
 
         res.redirect('member-list');
